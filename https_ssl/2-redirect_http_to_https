@@ -32,20 +32,26 @@ defaults
 	errorfile 502 /etc/haproxy/errors/502.http
 	errorfile 503 /etc/haproxy/errors/503.http
 	errorfile 504 /etc/haproxy/errors/504.http
-
-frontend  emmanuel-frontend-http
+frontend http_front
         bind *:80
+        acl is_http hdr(host) -i www.kambaikariuki.tech
+        redirect scheme https code 301 if is_http
+frontend https_front
+	bind *:443 ssl crt /etc/letsencrypt/live/www.kambaikariuki.tech/new_chain.pem
+	
+	option httpclose
+        default_backend https_backend
+#        server 6306-web-02 54.90.120.102:80 check
+#	server 6306-web-01 54.197.130.241:80 check
+
+#frontend lb-frontend
+ #       bind *:80
+  #      mode http
+   #     default_backend lb-backend
+backend https_backend
         mode http
-	http-request redirect scheme https code 301 unless { ssl_fc }
-	http-request set-header X-Forwarded-Proto http
-        default_backend emmanuel-backend
-
-frontend emmanuel-frontend-https
-	bind *:443 ssl crt /etc/haproxy/certs/www.kwizeraemmanuel.tech.pem
-	http-request set-header X-Forwarded-Proto https
-	default_backend emmanuel-backend
-
-backend emmanuel-backend
         balance roundrobin
-        server 6231-web-01 18.234.84.75:80 check
-        server 6231-web-02 3.95.57.8:80 check
+        server web-01 54.197.130.241:80 check
+        server web-02 54.90.120.102:80 check
+#frontend lb-01
+#        bind *:443 ssl cert /etc/letsencrypt/live/www.kambakariuki.tech/new_chain.pem
