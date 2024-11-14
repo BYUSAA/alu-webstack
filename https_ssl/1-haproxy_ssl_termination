@@ -32,19 +32,22 @@ defaults
 	errorfile 502 /etc/haproxy/errors/502.http
 	errorfile 503 /etc/haproxy/errors/503.http
 	errorfile 504 /etc/haproxy/errors/504.http
+frontend https_front
+	bind *:443 ssl crt /etc/letsencrypt/live/www.kambaikariuki.tech/new_chain.pem
+	
+	option httpclose
+        default_backend https_backend
+#        server 6306-web-02 54.90.120.102:80 check
+#	server 6306-web-01 54.234.168.72:80 check
 
-frontend pacifique-frontend-http
-        bind *:80
+#frontend lb-frontend
+ #       bind *:80
+  #      mode http
+   #     default_backend lb-backend
+backend https_backend
         mode http
-	http-request set-header X-Forwarded-Proto http
-        default_backend pacifique-backend
-
-frontend pacifique-frontend-https
-	bind *:443 ssl crt /etc/haproxy/certs/www.nziza.tech.pem
-	http-request set-header X-Forwarded-Proto https
-	default_backend pacifique-backend
-
-backend pacifique-backend
         balance roundrobin
-        server 6196-web-01 54.234.168.72:80 check
-        server 6196-web-02 34.202.235.70:80 check
+        server web-01 54.234.168.72:80 check
+        server web-02 54.90.120.102:80 check
+#frontend lb-01
+#        bind *:443 ssl cert /etc/letsencrypt/live/www.kambakariuki.tech/new_chain.pem
