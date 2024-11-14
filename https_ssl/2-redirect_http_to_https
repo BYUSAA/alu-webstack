@@ -42,7 +42,7 @@ frontend https_front
 	option httpclose
         default_backend https_backend
 #        server 6306-web-02 54.90.120.102:80 check
-#	server 6306-web-01 54.197.130.241:80 check
+#	server 6306-web-01 54.234.168.72:80 check
 
 #frontend lb-frontend
  #       bind *:80
@@ -51,7 +51,7 @@ frontend https_front
 backend https_backend
         mode http
         balance roundrobin
-        server web-01 54.197.130.241:80 check
+        server web-01 54.234.168.72:80 check
         server web-02 54.90.120.102:80 check
 #frontend lb-01
 #        bind *:443 ssl cert /etc/letsencrypt/live/www.kambakariuki.tech/new_chain.pem
