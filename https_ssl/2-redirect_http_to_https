@@ -34,14 +34,14 @@ defaults
 	errorfile 504 /etc/haproxy/errors/504.http
 frontend http_front
         bind *:80
-        acl is_http hdr(host) -i www.kambaikariuki.tech
+        acl is_http hdr(host) -i www.byusa.byusa.tech
         redirect scheme https code 301 if is_http
 frontend https_front
-	bind *:443 ssl crt /etc/letsencrypt/live/www.kambaikariuki.tech/new_chain.pem
+	bind *:443 ssl crt /etc/letsencrypt/live/www.byusa.byusa.tech/new_chain.pem
 	
 	option httpclose
         default_backend https_backend
-#        server 6306-web-02 54.90.120.102:80 check
+#        server 6306-web-02 54.88.109.255:80 check
 #	server 6306-web-01 54.234.168.72:80 check
 
 #frontend lb-frontend
@@ -52,6 +52,5 @@ backend https_backend
         mode http
         balance roundrobin
         server web-01 54.234.168.72:80 check
-        server web-02 54.90.120.102:80 check
+        server web-02 54.88.109.255:80 check
 #frontend lb-01
-#        bind *:443 ssl cert /etc/letsencrypt/live/www.kambakariuki.tech/new_chain.pem
